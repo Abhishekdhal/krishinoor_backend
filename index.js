@@ -1,22 +1,21 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config/db');
+const connectDB = require('./middleware/database');
 // Important: Mongoose MUST be imported to ensure models are registered
 const mongoose = require('mongoose');
 
 // Initialize the Express app
 const app = express();
 
-// Database Connection
-// NOTE: For Vercel deployments, the connection is typically handled during the cold start.
-connectDB();
-
 // Middleware
 // Enable CORS for all routes and origins (for development/public APIs)
 app.use(cors());
 // Body parser: allows us to get data in req.body
 app.use(express.json());
+
+// Connect to database
+app.use('/api', connectDB);
 
 // Define Routes
 app.use('/api/auth', require('./routes/auth'));
