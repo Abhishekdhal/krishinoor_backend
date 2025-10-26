@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config/db');
+const connectDB = require('./middleware/database');
 // Important: Mongoose MUST be imported to ensure models are registered
 const mongoose = require('mongoose');
 
@@ -15,12 +15,10 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to database
-connectDB();
+app.use('/api', connectDB);
 
 // Define Routes
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/feedback', require('./routes/feedback'));
-app.use('/api/problem', require('./routes/problem'));
 
 // Simple default route for health check
 app.get('/', (req, res) => {
