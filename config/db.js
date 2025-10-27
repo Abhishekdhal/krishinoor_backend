@@ -3,9 +3,6 @@ const mongoose = require('mongoose');
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 30000,
-      tls: true,
-      tlsAllowInvalidCertificates: true,
     });
     console.log('MongoDB connected successfully');
   } catch (error) {
