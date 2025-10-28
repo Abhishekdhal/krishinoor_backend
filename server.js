@@ -16,10 +16,8 @@ app.use('/api/feedback', require('./routes/feedback'));
 app.use('/api/problem', require('./routes/problem'));
 
 app.get('/', (req, res) => {
-  const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
   res.json({ 
     message: 'Auth API is running',
-    database: dbStatus,
     environment: process.env.NODE_ENV || 'development'
   });
 });
