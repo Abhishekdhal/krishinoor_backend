@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const Problem = require('../models/Problem');
 
+// Configure Multer for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
@@ -14,19 +15,26 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// --- POST /api/problem ---
 router.post('/', upload.single('image'), async (req, res) => {
   try {
-    const { text } = req.body;
-    const imageUrl = req.file.path;
+    const { text, imageUrl: providedUrl } = req.body;
+
+    // Determine image URL (either uploaded file or provided URL)
+    const imageUrl = req.file ? req.file.path : providedUrl;
 
     if (!text || !imageUrl) {
-      return res.status(400).json({ success: false, message: 'Please provide text and an image' });
+      return res.status(400).json({ success: false, message: 'Please provide text and an image or image URL' });
     }
 
     const newProblem = new Problem({ text, imageUrl });
     await newProblem.save();
 
-    res.status(201).json({ success: true, message: 'Problem submitted successfully' });
+    res.status(201).json({
+      success: true,
+      message: 'Problem submitted successfully',
+      problem: newProblem
+    });
   } catch (error) {
     console.error('Problem Error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
