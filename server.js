@@ -9,6 +9,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static('uploads'));
+
 connectDB();
 
 app.use('/api/auth', require('./routes/auth'));
