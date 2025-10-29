@@ -3,7 +3,6 @@ const router = express.Router();
 const multer = require('multer');
 const Problem = require('../models/Problem');
 
-// Configure Multer for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
@@ -15,12 +14,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// --- POST /api/problem ---
 router.post('/', upload.single('image'), async (req, res) => {
   try {
     const { text, imageUrl: providedUrl } = req.body;
 
-    // Determine image URL (either uploaded file or provided URL)
     const imageUrl = req.file ? req.file.path : providedUrl;
 
     if (!text || !imageUrl) {
